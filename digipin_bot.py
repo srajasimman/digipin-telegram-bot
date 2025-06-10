@@ -166,6 +166,12 @@ async def handle_location(update: Update, context: ContextTypes.DEFAULT_TYPE):
         lon = location.longitude
         pin = encode_digipin(lat, lon)
         await update.message.reply_text(f'📍 Location DIGIPIN: `{pin}`', parse_mode='Markdown')
+        qr_image = generate_qr_code(pin)
+        qr_image_path = 'digipin_qr.png'
+        qr_image.save(qr_image_path)
+        with open(qr_image_path, 'rb') as qr_file:
+            await update.message.reply_photo(photo=qr_file, caption=f'📷 QR Code for DIGIPIN: {pin}')
+        os.remove(qr_image_path)  # Clean up the QR code image file
     except Exception as e:
         await update.message.reply_text(f'❌ Error encoding location: {e}')
 
