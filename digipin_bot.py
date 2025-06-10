@@ -98,18 +98,17 @@ def decode_digipin(digipin):
 
     return round((min_lat + max_lat) / 2, 6), round((min_lon + max_lon) / 2, 6)
 
-def generate_qr_code(digipin):
+def generate_qr_code(data):
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=10,
         border=4,
     )
-    qr.add_data(digipin)
+    qr.add_data(data)
     qr.make(fit=True)
     img = qr.make_image(fill_color="black", back_color="white")
     return img
-
 
 # /start or /help
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
