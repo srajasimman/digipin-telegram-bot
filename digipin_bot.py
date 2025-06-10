@@ -150,6 +150,12 @@ async def decode(update: Update, context: ContextTypes.DEFAULT_TYPE):
         google_maps_url = f'https://www.google.com/maps/search/?api=1&query={lat},{lon}'
         await update.message.reply_text(f'🌍 Latitude: `{lat}`\n🌐 Longitude: `{lon}`', parse_mode='Markdown')
         await update.message.reply_text(f'🔗 Google Maps: {google_maps_url}')
+        qr_image = generate_qr_code(google_maps_url)
+        qr_image_path = 'location_qr.png'
+        qr_image.save(qr_image_path)
+        with open(qr_image_path, 'rb') as qr_file:
+            await update.message.reply_photo(photo=qr_file, caption='Google Maps Link')
+        os.remove(qr_image_path)  # Clean up the QR code image file
     except Exception as e:
         await update.message.reply_text(f'❌ Error: {e}')
 
